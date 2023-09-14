@@ -1,0 +1,68 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: evanshortiss-poi-gateway-app-dev
+  annotations:
+    argocd/app-name: evanshortiss-poi-gateway-app-dev
+    backstage.io/kubernetes-id: evanshortiss-poi-gateway-app
+    backstage.io/kubernetes-namespace: evanshortiss
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: rhdh-vegas/evanshortiss-gateway
+    janus-idp.io/tekton-enabled: 'true'
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.rosa-bvg5j.wov7.p1.openshiftapps.com/dev-pipelines/ns/evanshortiss/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.rosa-bvg5j.wov7.p1.openshiftapps.com/k8s/ns/evanshortiss/deployments/evanshortiss-poi-gateway-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.rosa-bvg5j.wov7.p1.openshiftapps.com/#https://github.com/rhdh-vegas/evanshortiss-gateway?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "user:default/evanshortiss"
+  system: workshop-system-evanshortiss
+  providesApis:
+    - gateway-api-evanshortiss
+  consumesApis:
+    - backend-api-evanshortiss
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-evanshortiss
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "user:default/evanshortiss"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api-evanshortiss
+  description: API surface exposed to interact with Backends (summit POIs + parks data) via the Gateway
+  links:
+    - url: http://evanshortiss-poi-gateway-app-evanshortiss.apps.rosa-bvg5j.wov7.p1.openshiftapps.com/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/rhdh-vegas/evanshortiss-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "user:default/evanshortiss"
+  system: workshop-system-evanshortiss
+  definition:
+    $text: https://github.com/rhdh-vegas/evanshortiss-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
